@@ -2,14 +2,58 @@
   "topic": "문어",
   "title": "문어는 다리가 몇 개일까? 🐙 함께 세어 봐요!",
   "description": "바닷속 친구 문어를 만나 봐요! 문어 다리를 하나부터 여덟까지 함께 세어 보아요.\n#shorts #유아교육 #동물",
-  "tags": ["문어", "바다동물", "숫자세기", "유아", "키즈", "동물이름", "어린이교육", "바다"],
+  "tags": [
+    "문어",
+    "바다동물",
+    "숫자세기",
+    "유아",
+    "키즈",
+    "동물이름",
+    "어린이교육",
+    "바다"
+  ],
   "scenes": [
-    {"narration": "안녕, 친구들! 오늘은 바닷속 친구를 만나러 가 볼까요?", "on_screen_text": "바닷속 친구", "visual_query": "ocean underwater"},
-    {"narration": "짜잔! 문어예요. 문어는 몸이 말랑말랑해요.", "on_screen_text": "문어", "visual_query": "octopus"},
-    {"narration": "문어는 다리가 몇 개일까요? 우리 같이 세어 봐요.", "on_screen_text": "다리가 몇 개?", "visual_query": "octopus tentacles"},
-    {"narration": "하나, 둘, 셋, 넷, 다섯, 여섯, 일곱, 여덟!", "on_screen_text": "1 2 3 4 5 6 7 8", "visual_query": "octopus swimming"},
-    {"narration": "와! 문어는 다리가 여덟 개예요.", "on_screen_text": "다리 8개!", "visual_query": "octopus close up"},
-    {"narration": "문어 다리에는 동글동글 빨판이 있어서 바위에 착 붙을 수 있어요.", "on_screen_text": "동글동글 빨판", "visual_query": "octopus suckers"},
-    {"narration": "오늘 배운 것! 문어는 다리가 몇 개? 맞아요, 여덟 개! 잘했어요!", "on_screen_text": "문어 다리는 8개", "visual_query": "coral reef"}
+    {
+      "narration": "안녕, 친구들! 오늘은 바닷속 친구를 만나러 가 볼까요?",
+      "on_screen_text": "바닷속 친구",
+      "visual_query": "ocean underwater",
+      "video_prompt": "a curious little cartoon octopus peeking out from colorful coral under the sea, sunbeams through the water, slow camera push in"
+    },
+    {
+      "narration": "짜잔! 문어예요. 문어는 몸이 말랑말랑해요.",
+      "on_screen_text": "문어",
+      "visual_query": "octopus",
+      "video_prompt": "the cute pink cartoon octopus waves hello with one tentacle and smiles, wobbly soft body, bubbles rising"
+    },
+    {
+      "narration": "문어는 다리가 몇 개일까요? 우리 같이 세어 봐요.",
+      "on_screen_text": "다리가 몇 개?",
+      "visual_query": "octopus tentacles",
+      "video_prompt": "the octopus looks at its own tentacles curiously, tilting its head, camera slowly circles around"
+    },
+    {
+      "narration": "하나, 둘, 셋, 넷, 다섯, 여섯, 일곱, 여덟!",
+      "on_screen_text": "1 2 3 4 5 6 7 8",
+      "visual_query": "octopus swimming",
+      "video_prompt": "the octopus raises its eight tentacles one by one in a playful dance, sparkles appear, centered shot"
+    },
+    {
+      "narration": "와! 문어는 다리가 여덟 개예요.",
+      "on_screen_text": "다리 8개!",
+      "visual_query": "octopus close up",
+      "video_prompt": "the happy octopus spins around showing all eight tentacles, little fish cheer around it"
+    },
+    {
+      "narration": "문어 다리에는 동글동글 빨판이 있어서 바위에 착 붙을 수 있어요.",
+      "on_screen_text": "동글동글 빨판",
+      "visual_query": "octopus suckers",
+      "video_prompt": "close up of the octopus tentacle gently sticking to a smooth rock with round suckers, soft light"
+    },
+    {
+      "narration": "오늘 배운 것! 문어는 다리가 몇 개? 맞아요, 여덟 개! 잘했어요!",
+      "on_screen_text": "문어 다리는 8개",
+      "visual_query": "coral reef",
+      "video_prompt": "the octopus and small fish friends wave goodbye in front of a bright coral reef, camera pulls back"
+    }
   ]
 }

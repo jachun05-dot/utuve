@@ -19,8 +19,9 @@ SCHEMA = {
                     "narration": {"type": "string"},
                     "on_screen_text": {"type": "string"},
                     "visual_query": {"type": "string"},
+                    "video_prompt": {"type": "string"},
                 },
-                "required": ["narration", "on_screen_text", "visual_query"],
+                "required": ["narration", "on_screen_text", "visual_query", "video_prompt"],
                 "additionalProperties": False,
             },
         },
@@ -33,6 +34,8 @@ BASE_RULES = """당신은 유튜브 쇼츠 전문 작가입니다. 한국어 세
 - narration: 성우가 읽을 문장. 장면당 1~2문장, 말하듯 자연스럽게. 숫자는 한글로 읽기 쉽게 씁니다.
 - on_screen_text: 화면 위쪽에 크게 띄울 짧은 문구(12자 이내).
 - visual_query: 무료 스톡 영상 검색어. 영어 1~3단어의 구체적인 명사(예: "octopus", "night sky").
+- video_prompt: AI 영상 생성용 영어 프롬프트. 한 장면(5초)을 구체적으로 묘사합니다:
+  주인공, 동작, 배경, 카메라 움직임. 글자·자막·로고는 넣지 않습니다. 장면끼리 등장인물과 분위기가 이어지게 씁니다.
 - title: 40자 이내, 클릭하고 싶지만 낚시가 아닌 제목.
 - description: 2~3문장 요약 + 마지막 줄에 해시태그 3개(#shorts 포함).
 - tags: 8~12개.

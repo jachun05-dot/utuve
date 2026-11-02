@@ -12,7 +12,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-from shorts import render, subtitles, tts, visuals
+from shorts import aivideo, render, subtitles, tts, visuals
 from shorts.config import ROOT, load_channel, load_env
 
 
@@ -54,7 +54,11 @@ def make_one(channel, topic=None, script_file=None, upload=False):
         dur = render.duration(str(workdir / audio)) + render.TAIL
         ass = subtitles.write_ass(words, channel, dur, str(workdir / f"sub_{i:02d}.ass"))
         overlay = visuals.headline_overlay(sc["on_screen_text"], channel, str(workdir / f"head_{i:02d}.png"))
-        video = visuals.pexels_video(sc["visual_query"], used)
+        video = None
+        ai_limit = channel.get("ai_video_scenes", "all")
+        if ai_limit == "all" or i < int(ai_limit):
+            video = aivideo.generate(sc.get("video_prompt") or sc["visual_query"], channel)
+        video = video or visuals.pexels_video(sc["visual_query"], used)
         if video:
             bg, is_video = video, True
         else:

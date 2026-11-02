@@ -32,3 +32,11 @@ audience_prompt: |
   - 무섭거나, 폭력적이거나, 위험한 행동을 따라 하게 하거나, 자극적인 내용은 절대 넣지 않습니다.
   - 사실이 틀리면 안 됩니다. 확실하지 않은 정보는 쓰지 않습니다.
   - 구독, 좋아요, 상품 구매를 아이에게 요구하지 않습니다.
+
+# 생성형 AI 영상 (.env 에 FAL_KEY 가 있을 때만 사용, 실패하면 Pexels -> 단색 배경)
+ai_model: fal-ai/kling-video/v3/turbo/standard/text-to-video   # 초당 약 $0.112
+ai_duration: "5"
+ai_video_scenes: all          # all 또는 숫자(앞에서 몇 장면만 AI로). 그림체 통일을 위해 키즈는 all 추천
+ai_style: >
+  cute 3D animated cartoon style, soft pastel colors, bright friendly lighting,
+  big expressive eyes, gentle and calm, safe for young children, no text, no logos

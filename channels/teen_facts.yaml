@@ -31,3 +31,11 @@ audience_prompt: |
   - 단, 사실은 반드시 정확해야 합니다. 과장·낚시·허위 정보는 금지입니다(유튜브 수익화 정책 위반).
   - 마지막 장면은 반전이나 여운으로 끝내고, 다음 영상이 궁금하게 만드세요.
   - 아동을 대상으로 하는 표현, 캐릭터, 말투는 쓰지 않습니다(이 채널은 아동용이 아님).
+
+# 생성형 AI 영상 (.env 에 FAL_KEY 가 있을 때만 사용, 실패하면 Pexels -> 단색 배경)
+ai_model: fal-ai/kling-video/v3/turbo/standard/text-to-video   # 초당 약 $0.112
+ai_duration: "5"
+ai_video_scenes: 3            # 첫 3장면(훅)만 AI, 나머지는 스톡 영상 -> 비용 절약
+ai_style: >
+  cinematic, photorealistic, vivid colors, dramatic lighting,
+  dynamic camera movement, high detail, no text, no logos

@@ -27,8 +27,11 @@ def render_scene(workdir: Path, idx: int, bg: str, bg_is_video: bool,
     frames = int(dur * FPS) + 1
     out = f"scene_{idx:02d}.mp4"
     if bg_is_video:
+        # Short clip + longer narration: slow it down a little (up to 1.4x) before looping.
+        stretch = min(max(dur / duration(bg), 1.0), 1.4)
         bg_in = ["-stream_loop", "-1", "-i", bg]
-        bg_f = f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},setsar=1[bg]"
+        bg_f = (f"[0:v]setpts={stretch:.3f}*PTS,scale={W}:{H}:force_original_aspect_ratio=increase,"
+                f"crop={W}:{H},fps={FPS},setsar=1[bg]")
     else:
         bg_in = ["-i", bg]
         bg_f = (f"[0:v]scale={int(W*1.15)}:{int(H*1.15)},zoompan=z='min(zoom+0.0007,1.15)'"
