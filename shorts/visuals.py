@@ -16,6 +16,10 @@ FONT_PATHS = [
     "/usr/share/fonts/truetype/nanum/NanumSquareRoundB.ttf",
     "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf",
     str(ROOT / "assets" / "fonts" / "font.ttf"),
+    "C:/Windows/Fonts/NanumSquareRoundEB.ttf",
+    "C:/Windows/Fonts/NanumSquareRoundB.ttf",
+    os.path.expandvars("%LOCALAPPDATA%/Microsoft/Windows/Fonts/NanumSquareRoundEB.ttf"),
+    os.path.expandvars("%LOCALAPPDATA%/Microsoft/Windows/Fonts/NanumSquareRoundB.ttf"),
     "C:/Windows/Fonts/malgunbd.ttf",
     "/System/Library/Fonts/AppleSDGothicNeo.ttc",
 ]

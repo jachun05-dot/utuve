@@ -9,6 +9,7 @@
 import argparse
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -83,6 +84,12 @@ def make_one(channel, topic=None, script_file=None, upload=False):
 
 
 def main():
+    # Windows consoles (cp949) can't print emoji in titles
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     ap = argparse.ArgumentParser(description="유튜브 쇼츠 자동 생성")
     ap.add_argument("--channel", required=True, help="channels/ 폴더의 설정 이름 (kids_edu, teen_facts)")
     ap.add_argument("--topic", help="주제 (생략하면 자동 선택)")
