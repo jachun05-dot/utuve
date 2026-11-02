@@ -1,4 +1,7 @@
-"""Generative AI video clips via fal.ai (one key, many models: Kling, Veo, Hailuo, Wan...)."""
+"""Generative AI backgrounds.
+
+ai_backend: comfyui (free, your own GPU) | fal (paid API: Kling, Veo...) | none
+"""
 import hashlib
 import json
 import os
@@ -6,6 +9,7 @@ import time
 
 import requests
 
+from . import comfy
 from .config import ROOT
 
 CACHE = ROOT / "cache" / "ai_video"
@@ -16,8 +20,20 @@ def _headers():
     return {"Authorization": f"Key {os.environ['FAL_KEY']}", "Content-Type": "application/json"}
 
 
-def generate(prompt: str, channel: dict, timeout: int = 900) -> str | None:
-    """Return a local mp4 path, or None if AI video is off / fails (caller falls back)."""
+def generate(prompt: str, channel: dict):
+    """Return (local_path, is_video), or None if AI is off / fails (caller falls back)."""
+    backend = channel.get("ai_backend", "none")
+    full_prompt = f"{prompt}. {channel.get('ai_style', '')}".strip(". ")
+    if backend == "comfyui":
+        return comfy.generate(full_prompt, channel["comfy_workflow"],
+                              channel.get("comfy_url", "http://127.0.0.1:8188"))
+    if backend == "fal":
+        path = _fal(prompt, channel)
+        return (path, True) if path else None
+    return None
+
+
+def _fal(prompt: str, channel: dict, timeout: int = 900) -> str | None:
     if not os.environ.get("FAL_KEY"):
         return None
     model = channel.get("ai_model", "fal-ai/kling-video/v3/turbo/standard/text-to-video")

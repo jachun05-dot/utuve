@@ -32,10 +32,15 @@ audience_prompt: |
   - 마지막 장면은 반전이나 여운으로 끝내고, 다음 영상이 궁금하게 만드세요.
   - 아동을 대상으로 하는 표현, 캐릭터, 말투는 쓰지 않습니다(이 채널은 아동용이 아님).
 
-# 생성형 AI 영상 (.env 에 FAL_KEY 가 있을 때만 사용, 실패하면 Pexels -> 단색 배경)
-ai_model: fal-ai/kling-video/v3/turbo/standard/text-to-video   # 초당 약 $0.112
+
+# ── 생성형 AI 배경 ── (실패하면 Pexels 스톡 -> 단색 배경 순서로 대체)
+ai_backend: comfyui           # comfyui(무료, 내 그래픽카드) | fal(유료 API) | none
+comfy_url: http://127.0.0.1:8188
+comfy_workflow: workflows/wan21_t2v_1.3b.json   # 첫 2장면(훅)만 AI 영상, 나머지는 스톡 (2070 Super 기준 클립당 약 5~15분)
+#   다른 선택지: workflows/sdxl_image.json (이미지, 빠름) / workflows/wan21_t2v_1.3b.json (영상, 느림)
+ai_video_scenes: 2            # all 또는 숫자(앞에서 몇 장면만 AI로)
+ai_model: fal-ai/kling-video/v3/turbo/standard/text-to-video   # ai_backend: fal 일 때만 사용
 ai_duration: "5"
-ai_video_scenes: 3            # 첫 3장면(훅)만 AI, 나머지는 스톡 영상 -> 비용 절약
 ai_style: >
   cinematic, photorealistic, vivid colors, dramatic lighting,
   dynamic camera movement, high detail, no text, no logos

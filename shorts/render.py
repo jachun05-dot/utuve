@@ -33,9 +33,16 @@ def render_scene(workdir: Path, idx: int, bg: str, bg_is_video: bool,
         bg_f = (f"[0:v]setpts={stretch:.3f}*PTS,scale={W}:{H}:force_original_aspect_ratio=increase,"
                 f"crop={W}:{H},fps={FPS},setsar=1[bg]")
     else:
+        # Still image: alternate camera moves so scenes don't all feel the same.
+        moves = [
+            "z='min(zoom+0.0009,1.18)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'",            # push in
+            "z='max(1.18-0.0009*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'",          # pull out
+            f"z=1.15:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/{frames})'",                   # pan up
+            f"z=1.15:x='(iw-iw/zoom)*on/{frames}':y='ih/2-(ih/zoom/2)'",                       # pan right
+        ]
         bg_in = ["-i", bg]
-        bg_f = (f"[0:v]scale={int(W*1.15)}:{int(H*1.15)},zoompan=z='min(zoom+0.0007,1.15)'"
-                f":x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={frames}:s={W}x{H}:fps={FPS},setsar=1[bg]")
+        bg_f = (f"[0:v]scale={W*2}:{H*2}:force_original_aspect_ratio=increase,crop={W*2}:{H*2},"
+                f"zoompan={moves[idx % len(moves)]}:d={frames}:s={W}x{H}:fps={FPS},setsar=1[bg]")
     cmd = ["ffmpeg", "-y", *bg_in, "-i", overlay, "-i", audio,
            "-filter_complex", f"{bg_f};[bg][1:v]overlay=0:0,ass={ass}[v];[2:a]apad[a]",
            "-map", "[v]", "-map", "[a]", "-t", f"{dur:.3f}",

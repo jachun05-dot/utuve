@@ -54,18 +54,19 @@ def make_one(channel, topic=None, script_file=None, upload=False):
         dur = render.duration(str(workdir / audio)) + render.TAIL
         ass = subtitles.write_ass(words, channel, dur, str(workdir / f"sub_{i:02d}.ass"))
         overlay = visuals.headline_overlay(sc["on_screen_text"], channel, str(workdir / f"head_{i:02d}.png"))
-        video = None
+        bg, is_video = None, False
         ai_limit = channel.get("ai_video_scenes", "all")
         if ai_limit == "all" or i < int(ai_limit):
-            video = aivideo.generate(sc.get("video_prompt") or sc["visual_query"], channel)
-        video = video or visuals.pexels_video(sc["visual_query"], used)
-        if video:
-            bg, is_video = video, True
-        else:
+            got = aivideo.generate(sc.get("video_prompt") or sc["visual_query"], channel)
+            if got:
+                bg, is_video = got
+        if not bg:
+            bg = visuals.pexels_video(sc["visual_query"], used)
+            is_video = bool(bg)
+        if not bg:
             bg = visuals.gradient_background(channel, f"{meta['topic']}{i}", str(workdir / f"bg_{i:02d}.png"))
-            is_video = False
         scene_files.append(render.render_scene(
-            workdir, i, str(Path(bg).resolve()) if is_video else Path(bg).name, is_video,
+            workdir, i, str(Path(bg).resolve()), is_video,
             Path(overlay).name, audio, Path(ass).name))
 
     final = render.concat(workdir, scene_files, channel)
