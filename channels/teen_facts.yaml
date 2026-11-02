@@ -1,0 +1,33 @@
+# 10대·일반 대상 빠른 템포 쇼츠
+name: 몰랐던 사실
+made_for_kids: false
+category_id: "24"            # Entertainment (교육 성격이면 27)
+privacy: private
+voice: ko-KR-InJoonNeural
+rate: "+12%"                 # 빠른 템포
+pitch: "+0Hz"
+target_seconds: 35
+scene_count: 8
+words_per_caption: 3
+caption_pop: true
+font: NanumSquareRound
+font_size: 84
+caption_color: "&H0000F0FF"   # 노랑 (ASS는 BGR 순서)
+caption_outline: "&H00000000"
+headline_color: [255, 255, 255]
+background_colors:
+  - [[20, 20, 40], [80, 20, 90]]
+  - [[10, 40, 60], [10, 90, 90]]
+  - [[60, 10, 20], [140, 40, 20]]
+music_volume: 0.08
+default_tags: [쇼츠, 몰랐던사실, 신기한사실, 상식, 꿀잼]
+topic_pool: >
+  우주, 동물의 이상한 능력, 인체, 역사 속 황당한 사건, 음식의 기원, 기술,
+  심리학 실험, 세계 기록, 일상 속 숨은 과학
+audience_prompt: |
+  시청자는 13세 이상 10대와 일반 시청자입니다.
+  - 첫 문장(첫 2초)은 스크롤을 멈추게 하는 강한 훅이어야 합니다. 예: "이거 알면 상위 1%입니다."
+  - 빠르고 리듬감 있는 말투, 짧은 문장, 가벼운 유머와 밈 감성은 OK.
+  - 단, 사실은 반드시 정확해야 합니다. 과장·낚시·허위 정보는 금지입니다(유튜브 수익화 정책 위반).
+  - 마지막 장면은 반전이나 여운으로 끝내고, 다음 영상이 궁금하게 만드세요.
+  - 아동을 대상으로 하는 표현, 캐릭터, 말투는 쓰지 않습니다(이 채널은 아동용이 아님).
