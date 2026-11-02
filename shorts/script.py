@@ -1,6 +1,15 @@
-"""Write a Shorts script with Claude (structured JSON output)."""
+"""Write a Shorts script with Claude.
+
+Two ways, picked automatically (or set SCRIPT_BACKEND=api|cli in .env):
+- api: Anthropic API key (ANTHROPIC_API_KEY), billed per use
+- cli: the Claude Code CLI logged in with a Pro/Max subscription (no extra cost,
+       counts toward the subscription's usage limits)
+"""
 import json
 import os
+import shutil
+import subprocess
+import tempfile
 
 import anthropic
 
@@ -42,10 +51,7 @@ BASE_RULES = """당신은 유튜브 쇼츠 전문 작가입니다. 한국어 세
 - 매번 새로운 각도와 구성으로 쓰세요. 다른 영상과 똑같은 틀을 반복하지 마세요."""
 
 
-def write_script(channel: dict, topic: str | None, recent_topics: list[str]) -> dict:
-    client = anthropic.Anthropic()
-    model = os.environ.get("CLAUDE_MODEL") or "claude-opus-5-5"
-
+def _prompts(channel, topic, recent_topics):
     if topic:
         ask = f"주제: {topic}"
     else:
@@ -55,11 +61,27 @@ def write_script(channel: dict, topic: str | None, recent_topics: list[str]) -> 
 
     user = (f"{ask}\n\n장면 수: {channel['scene_count']}개, "
             f"전체 길이: 약 {channel['target_seconds']}초 분량.")
+    system = BASE_RULES + "\n\n[채널 지침]\n" + channel["audience_prompt"]
+    return system, user
 
+
+def write_script(channel: dict, topic: str | None, recent_topics: list[str]) -> dict:
+    backend = os.environ.get("SCRIPT_BACKEND", "").lower()
+    if not backend:
+        backend = "api" if os.environ.get("ANTHROPIC_API_KEY") else "cli"
+    system, user = _prompts(channel, topic, recent_topics)
+    if backend == "cli":
+        return _via_cli(system, user)
+    return _via_api(system, user)
+
+
+def _via_api(system, user):
+    client = anthropic.Anthropic()
+    model = os.environ.get("CLAUDE_MODEL") or "claude-opus-5-5"
     response = client.beta.messages.create(
         model=model,
         max_tokens=16000,
-        system=BASE_RULES + "\n\n[채널 지침]\n" + channel["audience_prompt"],
+        system=system,
         messages=[{"role": "user", "content": user}],
         output_config={"effort": "medium",
                        "format": {"type": "json_schema", "schema": SCHEMA}},
@@ -72,3 +94,42 @@ def write_script(channel: dict, topic: str | None, recent_topics: list[str]) -> 
         raise RuntimeError("대본이 너무 길어 잘렸습니다. 장면 수를 줄여 보세요.")
     text = next(b.text for b in response.content if b.type == "text")
     return json.loads(text)
+
+
+def _valid(data) -> bool:
+    if not isinstance(data, dict) or not all(k in data for k in SCHEMA["required"]):
+        return False
+    need = SCHEMA["properties"]["scenes"]["items"]["required"]
+    return bool(data["scenes"]) and all(
+        isinstance(sc, dict) and all(isinstance(sc.get(k), str) and sc[k] for k in need)
+        for sc in data["scenes"])
+
+
+def _via_cli(system, user):
+    exe = shutil.which("claude")
+    if not exe:
+        raise SystemExit("대본을 쓸 방법이 없습니다. Claude Code(구독)를 설치·로그인하거나 "
+                         ".env 에 ANTHROPIC_API_KEY 를 넣어 주세요. 또는 --script-file 을 쓰세요.")
+    prompt = (f"{system}\n\n{user}\n\n"
+              "출력 형식: 아래 JSON 스키마에 맞는 JSON 객체 하나만 출력하세요. "
+              "코드블록, 설명, 다른 말은 쓰지 마세요. 파일을 만들거나 도구를 쓰지 마세요.\n"
+              + json.dumps(SCHEMA, ensure_ascii=False))
+    last_err = ""
+    for _ in range(3):
+        # Run in an empty folder so the CLI doesn't pick up this project's files.
+        with tempfile.TemporaryDirectory() as tmp:
+            p = subprocess.run([exe, "-p", "--output-format", "json"], input=prompt,
+                               capture_output=True, text=True, encoding="utf-8",
+                               cwd=tmp, timeout=900)
+        try:
+            outer = json.loads(p.stdout)
+            if outer.get("is_error"):
+                raise ValueError(outer.get("result") or p.stderr)
+            text = outer["result"]
+            data = json.loads(text[text.index("{"):text.rindex("}") + 1])
+            if _valid(data):
+                return data
+            last_err = "대본 형식이 맞지 않음"
+        except (ValueError, KeyError) as e:
+            last_err = str(e)[:300] or p.stderr[:300]
+    raise RuntimeError(f"Claude Code로 대본 작성 실패: {last_err}")

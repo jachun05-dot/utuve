@@ -17,7 +17,8 @@ pip install -r requirements.txt
 cp .env.example .env                      # 키 입력
 ```
 
-- `ANTHROPIC_API_KEY`: 대본 자동 작성 (영상 1개에 몇십 원 수준)
+- 대본 자동 작성: **Claude 구독(Pro/Max)이 있으면 키 없이** 돼요. Claude Code에 로그인만 해 두세요(`claude` 명령). 구독 사용량 한도에 포함돼요.
+  구독이 없으면 `ANTHROPIC_API_KEY` (영상 1개에 몇십 원 수준)
 - `PEXELS_API_KEY`: 무료 스톡 영상 (pexels.com/api 에서 무료 발급). **없으면 단색 배경이라 꼭 받으세요.**
 - `FAL_KEY`: (선택) 유료 AI 영상. 기본은 무료 ComfyUI라 필요 없어요.
 - 음성(edge-tts)은 무료, 키 필요 없음

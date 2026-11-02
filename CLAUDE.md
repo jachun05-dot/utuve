@@ -5,7 +5,7 @@ User is Korean-speaking; reply in Korean, simply. Target PC: Windows, RTX 2070 S
 
 ## Layout
 - `channels/*.yaml` — per-channel settings. `kids_edu` must keep `made_for_kids: true`.
-- `shorts/script.py` Claude script (needs ANTHROPIC_API_KEY) · `tts.py` edge-tts (free)
+- `shorts/script.py` Claude script: API key if set, else `claude -p` CLI (user's Pro/Max subscription) · `tts.py` edge-tts (free)
 - `shorts/comfy.py` local ComfyUI backend · `aivideo.py` backend dispatch (+ fal.ai)
 - `shorts/visuals.py` Pexels / gradient / headline · `subtitles.py` ASS captions · `render.py` ffmpeg
 - `workflows/*.json` ComfyUI API-format workflows; `{{PROMPT}}` and `"{{SEED}}"` are placeholders.
